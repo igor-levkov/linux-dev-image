@@ -38,7 +38,7 @@ gsettings set org.gnome.desktop.peripherals.mouse speed -0.82
 
 #required for react native and vs code
 #sudo sysctl -w fs.inotify.max_user_watches=524288
-#echo "fs.inotify.max_user_watches=524288" | sudo tee -a /etc/sysctl.d/50-libreswan.conf
+#echo "fs.inotify.max_user_watches=524288" | sudo tee -a /etc/sysctl.d/99-sysctl.conf
 
 #echo '#####################################'
 #echo '## INSTALL REPOSITORIES'
@@ -135,7 +135,7 @@ gsettings set org.gnome.desktop.wm.preferences button-layout 'appmenu:minimize,m
 
 #Wallpaper
 cp -R ./wallpapers/ $HOME/Pictures
-gsettings set org.gnome.desktop.background picture-uri-dark file://$HOME/Pictures/wallpapers/droid1.jpg
+gsettings set org.gnome.desktop.background picture-uri-dark file://$HOME/Pictures/wallpapers/firewatch.jpg
 
 echo '#####################################'
 echo '## INSTALL DEVELOPMENT TOOLS'
@@ -152,7 +152,13 @@ sudo rpm --import https://packages.microsoft.com/keys/microsoft.asc
 sudo sh -c 'echo -e "[code]\nname=Visual Studio Code\nbaseurl=https://packages.microsoft.com/yumrepos/vscode\nenabled=1\ngpgcheck=1\ngpgkey=https://packages.microsoft.com/keys/microsoft.asc" > /etc/yum.repos.d/vscode.repo'
 
 dnf check-update
-sudo dnf install code
+sudo dnf install -y code
+
+#MS Teams
+# sudo rpm --import https://packages.microsoft.com/keys/microsoft.asc
+# sudo sh -c 'echo -e "[teams]\nname=teams\nbaseurl=https://packages.microsoft.com/yumrepos/ms-teams\nenabled=1\ngpgcheck=1\ngpgkey=https://packages.microsoft.com/keys/microsoft.asc" > /etc/yum.repos.d/teams.repo'
+# sudo dnf check-update
+# sudo dnf install teams
 
 #code --install-extension vsmobile.vscode-react-native
 #code --install-extension xabikos.ReactSnippets
@@ -166,6 +172,7 @@ echo '#####################################'
 echo '## COMMUNICATION APPS'
 echo '#####################################'
 
+flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
 flatpak install -y flathub com.discordapp.Discord
 flatpak install -y flathub org.telegram.desktop
 
@@ -175,7 +182,7 @@ echo '#####################################'
 
 ####fix vaforites
 #gsettings get org.gnome.shell favorite-apps
-gsettings set org.gnome.shell favorite-apps "['org.gnome.Nautilus.desktop', 'firefox.desktop', 'org.gnome.Terminal.desktop', 'org.gnome.Software.desktop', 'code.desktop']"
+gsettings set org.gnome.shell favorite-apps "['org.gnome.Nautilus.desktop', 'firefox.desktop', 'org.gnome.Terminal.desktop', 'code.desktop']"
 
 ####fix default terminal profile
 profile=$(gsettings get org.gnome.Terminal.ProfilesList default)
@@ -183,12 +190,15 @@ profile=${profile:1:-1} # remove leading and trailing single quotes
 gsettings set "org.gnome.Terminal.Legacy.Profile:/org/gnome/terminal/legacy/profiles:/:$profile/" default-size-columns 132
 gsettings set "org.gnome.Terminal.Legacy.Profile:/org/gnome/terminal/legacy/profiles:/:$profile/" default-size-rows 43
 
-echo '#####################################'
-echo '## FIREWALL TOOLS'
-echo '#####################################'
+#echo '#####################################'
+#echo '## FIREWALL TOOLS'
+#echo '#####################################'
 #sudo dnf install -y firewall-config.noarch
 #sudo firewall-cmd --zone=internal --add-port=19000/tcp
 
+echo '#####################################'
+echo '## DOCKER SETUP'
+echo '#####################################'
 #Setup docker
 sudo dnf config-manager \
     --add-repo \
@@ -202,3 +212,9 @@ sudo systemctl enable containerd.service
 
 #create new text file template
 touch ~/Templates/New_File
+
+#Laptop only. Enable deep sleep by default
+#add "mem_sleep_default=deep" to /etc/default/grub
+# end result: GRUB_CMDLINE_LINUX="rhgb quiet mem_sleep_default=deep"
+#reconfig grub:
+#sudo grub2-mkconfig -o /boot/efi/EFI/fedora/grub.cfg
