@@ -62,6 +62,14 @@ sudo dnf install -y paper-icon-theme
 #prerequisities for adapta theme
 #sudo dnf install -y autoconf automake inkscape gdk-pixbuf2-devel glib2-devel libsass libxml2 pkgconfig sassc gnome-shell parallel
 
+# NVIDIA drivers
+sudo dnf install \
+  https://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
+sudo dnf install akmod-nvidia
+
+# Browser
+sudo dnf install -y firefox
+
 echo '#####################################'
 echo '## GNOME EXTENTIONS'
 echo '#####################################'
@@ -93,6 +101,9 @@ echo '#####################################'
 echo '#####################################'
 echo '## SET VISUALS'
 echo '#####################################'
+
+# BASH autocompletion and coloring
+sudo dnf install -y bash-color-prompt.noarch bash-completion.noarch
 
 #adapta theme
 #sudo dnf install -y adapta-gtk-theme
@@ -203,12 +214,12 @@ echo '#####################################'
 sudo dnf config-manager \
     --add-repo \
     https://download.docker.com/linux/fedora/docker-ce.repo
-sudo dnf install -y docker-ce docker-ce-cli containerd.io docker-compose-plugin
+sudo dnf install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
 sudo systemctl start docker
-sudo groupadd docker
-sudo usermod -aG docker $USER
+#sudo groupadd docker
+#sudo usermod -aG docker $USER
 sudo systemctl enable docker.service
-sudo systemctl enable containerd.service
+#sudo systemctl enable containerd.service
 
 #create new text file template
 touch ~/Templates/New_File
@@ -218,3 +229,22 @@ touch ~/Templates/New_File
 # end result: GRUB_CMDLINE_LINUX="rhgb quiet mem_sleep_default=deep"
 #reconfig grub:
 #sudo grub2-mkconfig -o /boot/efi/EFI/fedora/grub.cfg
+
+# Usefull utilities
+sudo dnf install -y btop fzf tldr
+
+
+###################################
+# Experimental shell prompt
+###################################
+
+# Prerequisities
+curl --fail --remote-name --location --continue-at - \
+  --output-dir ~/Downloads \
+  https://github.com/ryanoasis/nerd-fonts/releases/download/v3.1.1/Meslo.zip
+unzip ~/Downloads/Meslo.zip -d ~/.fonts/
+fc-cache -vf # reload font cache
+
+# Installation
+curl -sS https://starship.rs/install.sh | sh
+echo 'eval "$(starship init bash)"' >> ~/.bashrc

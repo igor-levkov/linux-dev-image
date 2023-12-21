@@ -79,5 +79,20 @@ sudo dnf install -y tracker \
    tracker-miners
 
 # Browser
-sudo dnf intall firefox -y
+sudo dnf intall  -y firefox
 
+# Install Fonts
+sudo dnf install -y \
+   google-noto-color-emoji-fonts.noarch \
+   google-noto-fonts-common.noarch \
+   google-noto-sans-canadian-aboriginal-vf-fonts.noarch \
+   google-noto-sans-cherokee-vf-fonts.noarch \
+   google-noto-sans-cjk-vf-fonts.noarch \
+   google-noto-sans-math-fonts.noarch \
+   google-noto-sans-mono-cjk-vf-fonts.noarch \
+   google-noto-sans-mono-vf-fonts.noarch \
+   google-noto-sans-symbols-vf-fonts.noarch \
+   google-noto-sans-symbols2-fonts.noarch \
+   google-noto-sans-vf-fonts.noarch \
+   google-noto-serif-vf-fonts.noarch \
+   adobe-source-code-pro-fonts.noarch
