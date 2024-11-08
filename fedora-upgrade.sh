@@ -51,3 +51,7 @@ sudo dnf install symlinks
 sudo symlinks -r /usr | grep dangling
 
 sudo symlinks -r -d /usr
+
+# Update rescue kernel
+sudo rm /boot/*rescue*
+sudo kernel-install add "$(uname -r)" "/lib/modules/$(uname -r)/vmlinuz"
