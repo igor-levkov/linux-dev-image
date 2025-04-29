@@ -6,7 +6,7 @@ sudo dnf upgrade --refresh
 sudo shutdown -r 1
 
 sudo dnf install dnf-plugin-system-upgrade
-sudo dnf system-upgrade download --releasever=39 --allowerasing
+sudo dnf system-upgrade download --releasever=42 --allowerasing
 
 # Trigger the upgrade process
 sudo dnf system-upgrade reboot
