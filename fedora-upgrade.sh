@@ -6,10 +6,10 @@ sudo dnf upgrade --refresh
 sudo shutdown -r 1
 
 sudo dnf install dnf-plugin-system-upgrade
-sudo dnf system-upgrade download --releasever=39 --allowerasing
+sudo dnf system-upgrade download --releasever=43 --allowerasing
 
 # Trigger the upgrade process
-sudo dnf system-upgrade reboot
+sudo dnf5 offline reboot
 
 ###############
 # Optional post-upgrade tasks
@@ -25,12 +25,12 @@ sudo dnf install remove-retired-packages
 sudo remove-retired-packages
 
 # Clean-up old packages
-sudo dnf repoquery --unsatisfied
 sudo dnf repoquery --duplicates
 # sudo dnf remove --duplicates
 
 # Packages that are still on your system may no longer be in the repositories
-sudo dnf list extras
+sudo dnf list --extras
+# sudo dnf remove $(sudo dnf repoquery --extras --exclude=kernel,kernel-\*,kmod-\*)
 # sudo dnf autoremove
 
 old_kernels=($(dnf repoquery --installonly --latest-limit=-1 -q))
@@ -46,12 +46,16 @@ fi
 
 echo "Removed old kernels"
 
+# Clean-up old keys trusted for RPM package signing
+sudo dnf install clean-rpm-gpg-pubkey
+sudo clean-rpm-gpg-pubkey
+
 # Clean-up old symlinks
 sudo dnf install symlinks
 sudo symlinks -r /usr | grep dangling
 
 sudo symlinks -r -d /usr
 
-# Update rescue kernel
+# Regenerate rescue kernel
 sudo rm /boot/*rescue*
 sudo kernel-install add "$(uname -r)" "/lib/modules/$(uname -r)/vmlinuz"

@@ -73,7 +73,7 @@ sudo dnf install -y rygel
 sudo dnf install -y sushi \
    systemd-oomd-defaults
 #   totem # movie player
-sudo dnf install -y celluloid
+sudo dnf install -y celluloid gstreamer1-plugin-libav x264 h264enc
 # File indexing
 sudo dnf install -y tracker \
    tracker-miners
